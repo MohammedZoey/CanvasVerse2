@@ -3,105 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0f1117">
   <title>CanvasVerse</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       min-height: 100vh;
-      background: #0f1117;
-      color: #f5f7ff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow-x: hidden;
+      background: #0d0f14;
+      color: #ffffff;
     }
 
-    .app {
-      width: min(100%, 1000px);
-      margin: auto;
-      padding: 32px 20px 50px;
+    .screen {
+      min-height: 100vh;
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .hero {
       text-align: center;
-      padding: 55px 10px 40px;
+      margin-top: 55px;
+      margin-bottom: 45px;
     }
 
     .logo {
-      font-size: clamp(46px, 11vw, 82px);
+      margin: 0;
+      font-size: clamp(48px, 12vw, 82px);
       font-weight: 800;
       letter-spacing: -4px;
-      line-height: 1;
     }
 
     .tagline {
-      margin-top: 16px;
-      color: #aeb5c7;
+      margin-top: 14px;
+      color: #9da5b8;
       font-size: 18px;
-      letter-spacing: .3px;
+    }
+
+    .choose {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .choose h2 {
+      margin-bottom: 22px;
+      font-size: 25px;
     }
 
     .age-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
-      margin-top: 20px;
     }
 
-    .age-card {
-      min-height: 230px;
-      padding: 28px 20px;
-      border: 1px solid #292e3b;
+    .age-button {
+      min-height: 220px;
+      padding: 25px;
+      border: 1px solid #292e39;
       border-radius: 24px;
-      background: #171a23;
+      background: #171a21;
       color: white;
-      cursor: pointer;
       text-align: left;
-      transition: transform .18s ease, border-color .18s ease,
-                  background .18s ease;
-      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+      transition: .2s ease;
     }
 
-    .age-card:hover {
+    .age-button:hover {
       transform: translateY(-4px);
-      border-color: #5c667d;
-      background: #1c202b;
+      border-color: #697286;
+      background: #1d212a;
     }
 
-    .age-card:active {
+    .age-button:active {
       transform: scale(.98);
     }
 
-    .number {
-      display: block;
-      font-size: 15px;
-      color: #8f98ad;
-      margin-bottom: 55px;
-      letter-spacing: 1px;
+    .age-number {
+      color: #7f879a;
+      font-size: 13px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
     }
 
-    .age-card h2 {
-      font-size: 28px;
-      margin-bottom: 9px;
+    .age-button h3 {
+      margin: 55px 0 8px;
+      font-size: 27px;
     }
 
-    .age-card p {
-      color: #aeb5c7;
+    .age-button p {
+      margin: 0;
+      color: #aab1c0;
       line-height: 1.45;
-      font-size: 15px;
     }
 
-    .footer {
+    .hidden {
+      display: none;
+    }
+
+    .next-screen {
+      width: 100%;
+      max-width: 850px;
       text-align: center;
-      margin-top: 45px;
-      color: #626b80;
-      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    .next-screen h2 {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .next-screen p {
+      color: #aab1c0;
+      margin-bottom: 30px;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .choice {
+      min-height: 180px;
+      border: 1px solid #292e39;
+      border-radius: 24px;
+      background: #171a21;
+      color: white;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .back {
+      margin-top: 30px;
+      padding: 12px 20px;
+      border: 1px solid #343a48;
+      border-radius: 12px;
+      background: transparent;
+      color: #b7becd;
+      cursor: pointer;
     }
 
     @media (max-width: 700px) {
@@ -109,16 +155,16 @@
         grid-template-columns: 1fr;
       }
 
-      .age-card {
+      .age-button {
         min-height: 150px;
       }
 
-      .number {
-        margin-bottom: 24px;
+      .age-button h3 {
+        margin-top: 25px;
       }
 
-      .hero {
-        padding-top: 35px;
+      .choice-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -126,42 +172,77 @@
 
 <body>
 
-  <main class="app">
+  <main class="screen">
 
-    <section class="hero">
+    <section id="home" class="hero">
       <h1 class="logo">CanvasVerse</h1>
       <p class="tagline">Create. Color. Imagine.</p>
     </section>
 
-    <section class="age-grid">
+    <section id="ageSelection" class="choose">
+      <h2>Choose your age group</h2>
 
-      <button class="age-card" onclick="chooseAge('3-10')">
-        <span class="number">01</span>
-        <h2>Ages 3–10</h2>
-        <p>Simple, fun coloring experiences made for young artists.</p>
-      </button>
+      <div class="age-grid">
 
-      <button class="age-card" onclick="chooseAge('11-15')">
-        <span class="number">02</span>
-        <h2>Ages 11–15</h2>
-        <p>More detailed art, creative tools, shading, and Free Draw.</p>
-      </button>
+        <button class="age-button" onclick="selectAge('3–10')">
+          <span class="age-number">01</span>
+          <h3>Ages 3–10</h3>
+          <p>Simple coloring experiences and fun creative pages.</p>
+        </button>
 
-      <button class="age-card" onclick="chooseAge('16+')">
-        <span class="number">03</span>
-        <h2>Ages 16+</h2>
-        <p>A full creative studio for advanced drawing and coloring.</p>
-      </button>
+        <button class="age-button" onclick="selectAge('11–15')">
+          <span class="age-number">02</span>
+          <h3>Ages 11–15</h3>
+          <p>More detailed art, shading, and creative tools.</p>
+        </button>
 
+        <button class="age-button" onclick="selectAge('16+')">
+          <span class="age-number">03</span>
+          <h3>Ages 16+</h3>
+          <p>An advanced creative studio for artists.</p>
+        </button>
+
+      </div>
     </section>
 
-    <p class="footer">CanvasVerse • Your creativity, your canvas.</p>
+    <section id="nextScreen" class="next-screen hidden">
+      <h2 id="selectedAge"></h2>
+      <p>What would you like to create?</p>
+
+      <div class="choice-grid">
+        <button class="choice" onclick="comingSoon('Coloring Books')">
+          Coloring Books
+        </button>
+
+        <button class="choice" onclick="comingSoon('Free Draw')">
+          Free Draw
+        </button>
+      </div>
+
+      <button class="back" onclick="goHome()">← Back</button>
+    </section>
 
   </main>
 
   <script>
-    function chooseAge(age) {
-      alert("CanvasVerse • " + age + " selected!");
+    function selectAge(age) {
+      document.getElementById("ageSelection").classList.add("hidden");
+      document.getElementById("home").classList.add("hidden");
+
+      document.getElementById("selectedAge").textContent =
+        "CanvasVerse • " + age;
+
+      document.getElementById("nextScreen").classList.remove("hidden");
+    }
+
+    function goHome() {
+      document.getElementById("nextScreen").classList.add("hidden");
+      document.getElementById("home").classList.remove("hidden");
+      document.getElementById("ageSelection").classList.remove("hidden");
+    }
+
+    function comingSoon(feature) {
+      alert(feature + " is coming next!");
     }
   </script>
 
